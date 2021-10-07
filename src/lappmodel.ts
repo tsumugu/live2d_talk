@@ -213,7 +213,6 @@ export class LAppModel extends CubismUserModel {
             // callback
             setupEyeBlink();
           });
-        console.log("load fin");
         this._state = LoadStep.WaitLoadPose;
       } else {
         this._state = LoadStep.SetupEyeBlink;
@@ -793,6 +792,8 @@ export class LAppModel extends CubismUserModel {
 
     this.getRenderer().setRenderState(frameBuffer, viewport);
     this.getRenderer().drawModel();
+
+    console.log("draw fin");
   }
 
   /**
