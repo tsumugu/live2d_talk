@@ -53,7 +53,6 @@ export class LAppDelegate {
    */
   public initialize(): boolean {
     // キャンバスの作成
-    // TODO: ↓これをgetElemetByIdにするとよきかも
     canvas = document.createElement('canvas');
     if (LAppDefine.CanvasSize === 'auto') {
       this._resizeCanvas();
@@ -119,7 +118,7 @@ export class LAppDelegate {
   public onResize(): void {
     this._resizeCanvas();
     this._view.initialize();
-    //this._view.initializeSprite();
+    this._view.initializeSprite();
   }
 
   /**
@@ -284,7 +283,7 @@ export class LAppDelegate {
 
     LAppPal.updateTime();
 
-    //this._view.initializeSprite();
+    this._view.initializeSprite();
   }
 
   /**

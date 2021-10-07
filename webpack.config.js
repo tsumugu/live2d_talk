@@ -1,8 +1,6 @@
 var path = require('path');
-
+const webpack = require('webpack')
 module.exports = {
-  //mode: 'production',
-  //mode: 'development',
   target: ['web', 'es5'],
   entry: './src/main.ts',
   output: {
@@ -13,8 +11,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
-      '@framework': path.resolve(__dirname, './lib/Framework/src'),
-      vue$: "vue/dist/vue.esm.js"
+      '@framework': path.resolve(__dirname, './lib/Framework/src')
     }
   },
   module: {
@@ -26,6 +23,11 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+  ],
   devServer: {
     contentBase: path.resolve(__dirname, '..'),
     watchContentBase: true,

@@ -30,11 +30,11 @@ export const ViewLogicalMaxBottom = -2.0;
 export const ViewLogicalMaxTop = 2.0;
 
 // 相対パス
-//export const ResourcesPath = '../lib/Resources/';
-export const ResourcesPath = '';
+export const ResourcesPath = './Resources/';
 
 // モデルの後ろにある背景の画像ファイル
-//export const BackImageName = 'back_class_normal.png';
+export const BackImageName = 'bg.png';
+//export const BackImageName = 'bg_white.png';
 
 // 歯車
 //export const GearImageName = 'icon_gear.png';

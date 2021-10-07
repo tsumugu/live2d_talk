@@ -144,6 +144,10 @@ export class LAppLive2DManager {
       const model: LAppModel = this.getModel(i);
 
       if (model.getModel()) {
+        //projection.scale(2.2, 2.2);
+        projection.scale(2.5, width/height*2.5);
+        projection.translate(0, width/height*-1.5);
+        /*
         if (model.getModel().getCanvasWidth() > 1.0 && width < height) {
           // 横に長いモデルを縦長ウィンドウに表示する際モデルの横サイズでscaleを算出する
           model.getModelMatrix().setWidth(2.0);
@@ -151,6 +155,7 @@ export class LAppLive2DManager {
         } else {
           projection.scale(height / width, 1.0);
         }
+        */
 
         // 必要があればここで乗算
         if (this._viewMatrix != null) {

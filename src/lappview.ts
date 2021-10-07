@@ -119,7 +119,6 @@ export class LAppView {
   /**
    * 画像の初期化を行う。
    */
-  /*
   public initializeSprite(): void {
     const width: number = canvas.width;
     const height: number = canvas.height;
@@ -136,9 +135,10 @@ export class LAppView {
     const initBackGroundTexture = (textureInfo: TextureInfo): void => {
       const x: number = width * 0.5;
       const y: number = height * 0.5;
-
-      const fwidth = textureInfo.width * 2.0;
-      const fheight = height * 0.95;
+      //const fwidth = textureInfo.width * 2.0;
+      //const fheight = height * 0.95;
+      const fwidth = textureInfo.width * 5;
+      const fheight = height * 5;
       this._back = new LAppSprite(x, y, fwidth, fheight, textureInfo.id);
     };
     textureManager.createTextureFromPngFile(
@@ -148,6 +148,7 @@ export class LAppView {
     );
 
     // 歯車画像初期化
+    /*
     imageName = LAppDefine.GearImageName;
     const initGearTexture = (textureInfo: TextureInfo): void => {
       const x = width - textureInfo.width * 0.5;
@@ -162,13 +163,13 @@ export class LAppView {
       false,
       initGearTexture
     );
+    */
 
     // シェーダーを作成
     if (this._programId == null) {
       this._programId = LAppDelegate.getInstance().createShader();
     }
   }
-  */
 
   /**
    * タッチされた時に呼ばれる。

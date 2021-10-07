@@ -7,32 +7,21 @@
 
 import { LAppDelegate } from './lappdelegate';
 import * as LAppDefine from './lappdefine';
-import Vue from "vue";
-import MyComponent from "./sub";
-
-new Vue({
-  el: "#app",
-  template: `<div class="app">
-        <h1>Hello Vue.js!</h1>
-        <my-component message="My Counter for TypeScript"></my-component>
-      </div>`,
-
-  components: {
-    "my-component": MyComponent,
-  },
-});
+import { MyUI } from './myui';
+import { SpeechRecognitionClass } from './speechrecognition';
 
 /**
  * ブラウザロード後の処理
  */
-// TODO: ここをVueに置き換えるとよきかも
 window.onload = (): void => {
   // create the application instance
   if (LAppDelegate.getInstance().initialize() == false) {
     return;
   }
-
   LAppDelegate.getInstance().run();
+  
+  MyUI.getInstance().initialize();
+  SpeechRecognitionClass.getInstance().initialize();
 };
 
 /**

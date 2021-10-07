@@ -6,18 +6,75 @@
   <title>TypeScript HTML App</title>
   <style>
     html, body {
-        margin: 0;
-        overflow: hidden;
+      margin: 0;
+      overflow: hidden;
+    }
+    #caption {
+      position: absolute;
+      bottom: 1rem;
+      padding: 2rem;
+      text-align: center;
+      font-family: "新ゴ B", sans-serif;
+      font-size: 2rem;
+      color: #ffffff;
+      -webkit-text-stroke: 0.1rem #f5b1aa;
+    }
+    #ui {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+      opacity: 0;
+    }
+    #fullscreen-button {
+      position: absolute;
+      right: 1rem;
+      bottom: 1rem;
+      color: #aeaeae;
+      cursor: pointer;
+    }
+    .icon-fullscreen {
+      font-size: 3rem !important;
+    }
+    .fadein {
+      animation : fadeIn 1s;
+      animation-fill-mode: both;
+    }
+    .fadeout {
+      animation : fadeOut 1s;
+      animation-fill-mode: both;
+    }
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    @keyframes fadeOut {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
     }
   </style>
   <!-- Pollyfill script -->
   <script src="https://unpkg.com/core-js-bundle@3.6.1/minified.js"></script>
   <!-- Live2DCubismCore script -->
   <script src = "./lib/Core/live2dcubismcore.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script type="text/javascript" src="//typesquare.com/3/tsst/script/ja/typesquare.js?6078df761bbc4cccbbc73aaae90393a3" charset="utf-8"></script>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="caption">山路を登りながら、こう考えた。智ちに働けば角かどが立つ。情じょうに棹さおさせば流される。意地を通とおせば窮屈きゅうくつだ。とかくに人の世は住みにくい。住みにくさが高こうじると、安い所へ引き越したくなる。どこへ越しても住みにくいと悟さとった時、詩が生れて、画えが出来る。</div>
+  <div id="ui">
+    <span id="fullscreen-button"><span class="material-icons icon-fullscreen">fullscreen</span></span>
+  </div>
   <!-- Build script -->
-  <script src = "./dist/bundle.js" defer></script>
+  <script src="./dist/bundle.js" defer></script>
 </body>
 </html>
