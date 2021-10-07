@@ -409,6 +409,7 @@ export class LAppModel extends CubismUserModel {
           if (this._textureCount >= textureCount) {
             // ロード完了
             this._state = LoadStep.CompleteSetup;
+            console.log("load finish!!!")
           }
         };
 
@@ -792,8 +793,6 @@ export class LAppModel extends CubismUserModel {
 
     this.getRenderer().setRenderState(frameBuffer, viewport);
     this.getRenderer().drawModel();
-
-    console.log("draw fin");
   }
 
   /**
