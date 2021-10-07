@@ -213,6 +213,7 @@ export class LAppModel extends CubismUserModel {
             // callback
             setupEyeBlink();
           });
+        console.log("load fin");
         this._state = LoadStep.WaitLoadPose;
       } else {
         this._state = LoadStep.SetupEyeBlink;
