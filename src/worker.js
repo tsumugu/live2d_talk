@@ -9,6 +9,6 @@ self.onmessage = (e)=>{
     self.postMessage([]);
     return false;
   }
-  let replyObj = reply_dictionary.filter(e=>isMatchList(e.said, tokensBasicForm))[0];
+  let replyObj = reply_dictionary.filter(e=>isMatchList(e.utterance, tokensBasicForm))[0];
   self.postMessage(replyObj);
 };

@@ -186,6 +186,7 @@ export class LAppLive2DManager {
   public changeScene(index: number): void {
     this._sceneIndex = index;
     if (LAppDefine.DebugLogEnable) {
+      LAppPal.printMessage("load start?");
       LAppPal.printMessage(`[APP]model index: ${this._sceneIndex}`);
     }
 
@@ -200,6 +201,9 @@ export class LAppLive2DManager {
     this.releaseAllModel();
     this._models.pushBack(new LAppModel());
     this._models.at(0).loadAssets(modelPath, modelJsonName);
+    if (LAppDefine.DebugLogEnable) {
+      LAppPal.printMessage("load fin?");
+    }
   }
 
   public setViewMatrix(m: CubismMatrix44) {
