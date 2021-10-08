@@ -40,6 +40,9 @@ import { LAppPal } from './lapppal';
 import { TextureInfo } from './lapptexturemanager';
 import { LAppWavFileHandler } from './lappwavfilehandler';
 
+import { MyUI } from './myui';
+import { MotionNo } from './motionno';
+
 enum LoadStep {
   LoadAssets,
   LoadModel,
@@ -409,7 +412,8 @@ export class LAppModel extends CubismUserModel {
           if (this._textureCount >= textureCount) {
             // ロード完了
             this._state = LoadStep.CompleteSetup;
-            console.log("load finish!!!")
+            // ロード中の表示を消す
+            MyUI.getInstance().hideLoadingDialog();
           }
         };
 
@@ -436,6 +440,7 @@ export class LAppModel extends CubismUserModel {
   /**
    * 更新
    */
+  private _beforeMotionNo: number;
   public update(): void {
     if (this._state != LoadStep.CompleteSetup) return;
 
@@ -452,17 +457,34 @@ export class LAppModel extends CubismUserModel {
     //--------------------------------------------------------------------------
     this._model.loadParameters(); // 前回セーブされた状態をロード
     if (this._motionManager.isFinished()) {
+      // モーションを再生
+      let motionNumber = MotionNo.getInstance().getMotionNo();
+      if (this._beforeMotionNo != motionNumber) {
+        console.log("Start Motion / No: ", motionNumber);
+        this.startMotion(LAppDefine.MotionGroupIdle, motionNumber, LAppDefine.PriorityIdle);
+        this._beforeMotionNo = motionNumber;
+      }
+      /*
       // モーションの再生がない場合、待機モーションの中からランダムで再生する
       this.startRandomMotion(
         LAppDefine.MotionGroupIdle,
         LAppDefine.PriorityIdle
       );
+      */
     } else {
       motionUpdated = this._motionManager.updateMotion(
         this._model,
         deltaTimeSeconds
       ); // モーションを更新
     }
+    /*
+    if (!this._motionManager.isFinished()) {
+      motionUpdated = this._motionManager.updateMotion(
+        this._model,
+        deltaTimeSeconds
+      ); // モーションを更新
+    }
+    */
     this._model.saveParameters(); // 状態を保存
     //--------------------------------------------------------------------------
 
@@ -478,6 +500,7 @@ export class LAppModel extends CubismUserModel {
       this._expressionManager.updateMotion(this._model, deltaTimeSeconds); // 表情でパラメータ更新（相対変化）
     }
 
+    /*
     // ドラッグによる変化
     // ドラッグによる顔の向きの調整
     this._model.addParameterValueById(this._idParamAngleX, this._dragX * 30); // -30から30の値を加える
@@ -496,6 +519,7 @@ export class LAppModel extends CubismUserModel {
     // ドラッグによる目の向きの調整
     this._model.addParameterValueById(this._idParamEyeBallX, this._dragX); // -1から1の値を加える
     this._model.addParameterValueById(this._idParamEyeBallY, this._dragY);
+    */
 
     // 呼吸など
     if (this._breath != null) {
@@ -507,6 +531,7 @@ export class LAppModel extends CubismUserModel {
       this._physics.evaluate(this._model, deltaTimeSeconds);
     }
 
+    /*
     // リップシンクの設定
     if (this._lipsync) {
       let value = 0.0; // リアルタイムでリップシンクを行う場合、システムから音量を取得して、0~1の範囲で値を入力します。
@@ -518,6 +543,7 @@ export class LAppModel extends CubismUserModel {
         this._model.addParameterValueById(this._lipSyncIds.at(i), value, 0.8);
       }
     }
+    */
 
     // ポーズの設定
     if (this._pose != null) {

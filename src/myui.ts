@@ -1,3 +1,5 @@
+import { MotionNo } from './motionno';
+
 export let s_instance: MyUI = null;
 export class MyUI {
   constructor() {
@@ -72,5 +74,18 @@ export class MyUI {
         FullScreenButtonElm.replaceChild(iconSpan, beforeSpan);
       }
     });
+
+    // DEBUG: モーション設定テスト (Groupについてはlappmodel.tsの464行目で変更可)
+    /*
+    setTimeout(()=>{
+      console.log("fire");
+      MotionNo.getInstance().setMotionNo(1);
+    }, 10000)
+    */
+  }
+  // ロード中の表示を消す
+  public hideLoadingDialog(): void {
+    console.log("load finished");
+    document.getElementById("loading").style.display = "none";
   }
 }

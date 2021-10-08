@@ -47,6 +47,7 @@ export const BackImageName = 'bg.png';
 // ディレクトリ名とmodel3.jsonの名前を一致させておくこと
 // 今回は切り替えをしないので1つだけ
 export const ModelDir: string[] = ['Hiyori'];
+//export const ModelDir: string[] = ['Kanna'];
 export const ModelDirSize: number = ModelDir.length;
 
 // 外部定義ファイル（json）と合わせる (モーション制作はがんばる)
