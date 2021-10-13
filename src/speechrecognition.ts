@@ -1,5 +1,8 @@
 // 形態素解析ライブラリをimport
 import {tokenize} from "kuromojin";
+import {MyUI} from "./myui";
+import {ReplyDict} from "./replydict";
+import { MotionNo } from './motionno';
 
 export let s_instance: SpeechRecognitionClass = null;
 export class SpeechRecognitionClass {
@@ -12,6 +15,8 @@ export class SpeechRecognitionClass {
     return s_instance;
   }
   public initialize(): void {
+    // 返答辞書の初期化
+    ReplyDict.getInstance().initialize();
     // 音声認識について設定
     let speechRecognitionFunc = ()=>{
       // TypeScriptではSpeechRecognitionについて型定義しないといけないらしい。 (参考: https://github.com/eguchi-asial/auto-text-recorder/blob/master/src/views/Home.vue)
@@ -45,30 +50,19 @@ export class SpeechRecognitionClass {
   }
   private reply(text): void {
     this.showLoadingCaption();
-    var reply_dictionary = [
-      {
-        "utterance": [["名前", "教える"], ["名前", "何"]],
-        "reply": "私の名前は花子です",
-        "motion": 0,
-        "intimacy": ["+", 10]
-      },
-      {
-        "utterance": [["犬", "好き"]],
-        "reply": "犬よりも猫のほうが好きです",
-        "motion_num": 0,
-        "intimacy": ["-", 10]
-      }
-    ];
     tokenize(text).then(tokens => {
-      let tokensBasicForm = tokens.map(e=>e.basic_form);
       // Web Workersを使えばUIがカクつくのを防げるかと思ったけど、そんなことなかった...。
       const worker = new Worker('./src/worker.js');
       const _this = this;
       worker.addEventListener('message', function(e) {
         let replyObj = e.data;
+        console.log(replyObj);
         if (replyObj!=undefined) {
           _this.speak(replyObj.reply);
         } else {
+          _this.speak("理解できませんでした...");
+        }
+        /* else {
           // 返答候補がなかったらChaplus API(雑談API)に投げる, CORS対策でプロキシ。
           const obj = {utterance: text};
           const method = "POST";
@@ -77,15 +71,17 @@ export class SpeechRecognitionClass {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           };
+          // TODO: プロキシをnetlify上に構築する
           fetch("https://tsumugu2626.xyz/chaplus.php?apikey=615ef2feaa3b3", {method, headers, body}).then(res=>{
             res.text().then((resStr)=>{
               _this.speak(resStr);
             });
           }).catch(error=>console.error(error));    
-
-        }
+        }*/
       }, false);
-      worker.postMessage({dic: reply_dictionary, tokens: tokensBasicForm});
+      let replyDictionary = ReplyDict.getInstance().getDictionary();
+      //onsole.log(replyDictionary)
+      worker.postMessage({dic: replyDictionary, tokens: tokens});
     });
   }
   private showListeningCaption(): void {
@@ -97,7 +93,29 @@ export class SpeechRecognitionClass {
     captionElm.innerHTML = "loading...";
   }
   private speak(text): void {
-    const captionElm = document.getElementById("caption");
-    captionElm.innerHTML = text;
+    if (MyUI.getInstance().getIsMuting()) {
+      // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
+      MotionNo.getInstance().setMotionNo(1);
+      // 字幕の書き換え
+      const captionElm = document.getElementById("caption");
+      captionElm.innerHTML = text;
+    } else {
+      // 音声再生テスト (音声の合成に1文字あたり5pt(=5円)かかるのでなるべく呼び出さない方向で...。初回クレジットが5万ptあるのでしばらくはなんとかなるはず。)
+      fetch('https://tsumugu2626.xyz/coefont.php?text='+encodeURI(text)).then(response => response.json()).then(data=>{
+        const WAVfileUrl = data.fileurl;
+        if (WAVfileUrl!=undefined&&WAVfileUrl!=null) {
+          let audioElem = new Audio();
+          audioElem.src = WAVfileUrl;
+          audioElem.play();
+        } else {
+          console.log("音声の生成に失敗しました", data);
+        }
+        // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
+        MotionNo.getInstance().setMotionNo(1);
+        // 字幕の書き換え
+        const captionElm = document.getElementById("caption");
+        captionElm.innerHTML = text;
+      });
+    }
   }
 }

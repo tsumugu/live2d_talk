@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=1900">
-  <title>TypeScript HTML App</title>
+  <title>キャラの名前をここに。</title>
   <style>
     html, body {
       margin: 0;
@@ -19,10 +19,10 @@
       width: 100%;
       height: 110%;
       background-color: black;
-      display: flex; /* 子要素をflexboxで揃える */
-      flex-direction: column; /* 子要素をflexboxにより縦方向に揃える */
-      justify-content: center; /* 子要素をflexboxにより中央に配置する */
-      align-items: center;  /* 子要素をflexboxにより中央に配置する */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     #loading > p {
       font-family: "新ゴ R", sans-serif;
@@ -44,7 +44,14 @@
       color: #aeaeae;
       cursor: pointer;
     }
-    .icon-fullscreen {
+    #mute-button {
+      position: absolute;
+      right: 4rem;
+      bottom: 1rem;
+      color: #aeaeae;
+      cursor: pointer;
+    }
+    .icon-fullscreen, .icon-volume {
       font-size: 3rem !important;
     }
     .fadein {
@@ -78,10 +85,17 @@
       z-index: 0;
       width: 100%;
       text-align: center;
-      font-family: "新ゴ B", sans-serif;
-      font-size: 2rem;
-      color: #ffffff;
-      -webkit-text-stroke: 0.1rem #f5b1aa;
+      /*
+      font-family: "Shin Go Ultra", sans-serif;
+      font-family: "TBCGothic E";
+      */
+      /* 本当はモリサワを使いたいが、ロードが遅いので仕方なくGoogle Fontsを使う。 */
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-size: 3rem;
+      color: #f5b1aa;
+      -webkit-text-stroke: 0.1rem black;
+      /*color: #ffffff;
+      -webkit-text-stroke: 0.1rem #f5b1aa;*/
     }
   </style>
   <!-- Pollyfill script -->
@@ -90,14 +104,21 @@
   <script src = "./lib/Core/live2dcubismcore.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <script type="text/javascript" src="//typesquare.com/3/tsst/script/ja/typesquare.js?6078df761bbc4cccbbc73aaae90393a3" charset="utf-8"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="loading"><p>Loading...</p></div>
   <div id="ui">
+    <span id="mute-button"><span class="material-icons icon-volume" title="Voiced by https://CoeFont.CLOUD">volume_off</span></span>
     <span id="fullscreen-button"><span class="material-icons icon-fullscreen">fullscreen</span></span>
   </div>
   <div id="caption"></div>
   <!-- Build script -->
   <script src="./dist/bundle.js" defer></script>
+  <script>
+    //Ts.setAutoLoadFontSelector("#caption", 1000);
+  </script>
 </body>
 </html>

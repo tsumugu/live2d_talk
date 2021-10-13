@@ -1,7 +1,8 @@
-import { MotionNo } from './motionno';
+import { SpeechRecognitionClass } from './speechrecognition';
 
 export let s_instance: MyUI = null;
 export class MyUI {
+  public isMuting: Boolean = true;
   constructor() {
   }
   public static getInstance(): MyUI {
@@ -75,17 +76,34 @@ export class MyUI {
       }
     });
 
-    // DEBUG: モーション設定テスト (Groupについてはlappmodel.tsの464行目で変更可)
-    /*
-    setTimeout(()=>{
-      console.log("fire");
-      MotionNo.getInstance().setMotionNo(1);
-    }, 10000)
-    */
+    // ミュート切り替えボタンが押されたときの処理
+    const MuteButtonElm = document.getElementById("mute-button");
+    MuteButtonElm.addEventListener("click", ()=>{
+      if (this.isMuting) {
+        let beforeSpan = MuteButtonElm.getElementsByTagName("span")[0];
+        let iconSpan = document.createElement("span");
+        iconSpan.classList.add("material-icons", "icon-volume");
+        iconSpan.innerHTML = "volume_up";
+        MuteButtonElm.replaceChild(iconSpan, beforeSpan);
+        this.isMuting = false;
+      } else {
+        let beforeSpan = MuteButtonElm.getElementsByTagName("span")[0];
+        let iconSpan = document.createElement("span");
+        iconSpan.classList.add("material-icons", "icon-volume");
+        iconSpan.innerHTML = "volume_off";
+        MuteButtonElm.replaceChild(iconSpan, beforeSpan);
+        this.isMuting = true;
+      }
+    });
+  }
+  public getIsMuting() {
+    return this.isMuting;
   }
   // ロード中の表示を消す
   public hideLoadingDialog(): void {
     console.log("load finished");
     document.getElementById("loading").style.display = "none";
+    // 音声認識を初期化・開始する
+    SpeechRecognitionClass.getInstance().initialize();
   }
 }

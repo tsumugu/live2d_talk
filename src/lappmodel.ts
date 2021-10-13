@@ -459,7 +459,12 @@ export class LAppModel extends CubismUserModel {
     if (this._motionManager.isFinished()) {
       // モーションを再生
       let motionNumber = MotionNo.getInstance().getMotionNo();
-      if (this._beforeMotionNo != motionNumber) {
+      let TimestampAtMotionSeted = MotionNo.getInstance().getMotionSetedTimestamp();
+      let nowTimesamp = Date.now();
+      let timediff = nowTimesamp-TimestampAtMotionSeted;
+      //if (this._beforeMotionNo!=motionNumber) {
+      // 1秒以内に変更されていた場合のみ実行
+      if (timediff<=1000) {
         console.log("Start Motion / No: ", motionNumber);
         this.startMotion(LAppDefine.MotionGroupIdle, motionNumber, LAppDefine.PriorityIdle);
         this._beforeMotionNo = motionNumber;
@@ -531,8 +536,8 @@ export class LAppModel extends CubismUserModel {
       this._physics.evaluate(this._model, deltaTimeSeconds);
     }
 
-    /*
     // リップシンクの設定
+    /*
     if (this._lipsync) {
       let value = 0.0; // リアルタイムでリップシンクを行う場合、システムから音量を取得して、0~1の範囲で値を入力します。
 
@@ -615,12 +620,14 @@ export class LAppModel extends CubismUserModel {
     }
 
     //voice
+    /*
     const voice = this._modelSetting.getMotionSoundFileName(group, no);
     if (voice.localeCompare('') != 0) {
       let path = voice;
       path = this._modelHomeDir + path;
       this._wavFileHandler.start(path);
     }
+    */
 
     if (this._debugMode) {
       LAppPal.printMessage(`[APP]start motion: [${group}_${no}`);

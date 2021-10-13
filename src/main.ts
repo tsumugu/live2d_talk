@@ -8,7 +8,6 @@
 import { LAppDelegate } from './lappdelegate';
 import * as LAppDefine from './lappdefine';
 import { MyUI } from './myui';
-import { SpeechRecognitionClass } from './speechrecognition';
 
 /**
  * ブラウザロード後の処理
@@ -21,7 +20,6 @@ window.onload = (): void => {
   LAppDelegate.getInstance().run();
   
   MyUI.getInstance().initialize();
-  SpeechRecognitionClass.getInstance().initialize();
 };
 
 /**

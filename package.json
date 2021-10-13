@@ -20,6 +20,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "firebase": "^9.1.2",
     "kuromojin": "^3.0.0",
     "path": "^0.12.7",
     "whatwg-fetch": "^3.6.2"
