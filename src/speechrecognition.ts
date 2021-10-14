@@ -53,7 +53,8 @@ export class SpeechRecognitionClass {
     this.showLoadingCaption();
     tokenize(text).then(tokens => {
       // Web Workersを使えばUIがカクつくのを防げるかと思ったけど、そんなことなかった...。
-      const worker = new Worker('./src/worker.js');
+      // Workerは、worker_old.jsとworker.jsの2種類がある。worker.jsのほうが早いかと思ったけどそうでもない。
+      const worker = new Worker('./src/worker_old.js');
       const _this = this;
       worker.addEventListener('message', function(e) {
         let replyObj = e.data;
