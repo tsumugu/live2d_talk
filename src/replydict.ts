@@ -39,6 +39,28 @@ export class ReplyDict {
       return [];
     }
     return this.docs;
+  }
+  private getUniqueStr(): String {
+    return new Date().getTime().toString(16)  + Math.floor(1000*Math.random()).toString(16)
+  }
+  public getDictionary_DEBUG(): Array<Object> {
+    const size = 100000;
+    let docs = [];
+    for (let i=0;i<size;i++) {
+      docs.push({
+        "id": this.getUniqueStr()+i.toString(),
+        "utterance": [["名前", "教える"], ["名前", "何"]],
+        "reply": "私の名前は花子です",
+        "emotion_name": "fun"
+      });
+    }
+    docs.push({
+      "id": this.getUniqueStr()+size.toString(),
+      "utterance": [["これ", "テスト"]],
+      "reply": "私の名前は花子です",
+      "emotion_name": "fun"
+    });
+    return docs;
     /*
     var reply_dictionary = [
       {

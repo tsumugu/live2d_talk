@@ -59,12 +59,16 @@ export class SpeechRecognitionClass {
         let replyObj = e.data;
         console.log(replyObj);
         if (replyObj!=undefined) {
-          _this.speak(replyObj.reply);
+          if (replyObj.reply!=undefined) {
+            _this.speak(replyObj.reply);
+          } else {
+            _this.speak("理解できませんでした...");
+          }
         } else {
           _this.speak("理解できませんでした...");
         }
         /* else {
-          // 返答候補がなかったらChaplus API(雑談API)に投げる, CORS対策でプロキシ。
+          // 返答候補がなかったらChaplus API(雑談API)に投げる
           const obj = {utterance: text};
           const method = "POST";
           const body = JSON.stringify(obj);
@@ -72,7 +76,6 @@ export class SpeechRecognitionClass {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           };
-          // TODO: プロキシをnetlify上に構築する
           fetch("https://tsumugu2626.xyz/chaplus.php?apikey=615ef2feaa3b3", {method, headers, body}).then(res=>{
             res.text().then((resStr)=>{
               _this.speak(resStr);
@@ -80,6 +83,7 @@ export class SpeechRecognitionClass {
           }).catch(error=>console.error(error));    
         }*/
       }, false);
+      // getDictionary_DEBUG()はデバッグ用
       let replyDictionary = ReplyDict.getInstance().getDictionary();
       //onsole.log(replyDictionary)
       worker.postMessage({dic: replyDictionary, tokens: tokens});
