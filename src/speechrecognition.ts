@@ -1,12 +1,14 @@
 // 形態素解析ライブラリをimport
-import {tokenize} from "kuromojin";
+//import {tokenize} from "kuromojin";
 import {MyUI} from "./myui";
 import {ReplyDict} from "./replydict";
 import { MotionNo } from './motionno';
 import { LAppModel } from './lappmodel';
+import kuromoji from "kuromoji";
 
 export let s_instance: SpeechRecognitionClass = null;
 export class SpeechRecognitionClass {
+  private kuromojiTokenizer: any;
   constructor() {
   }
   public static getInstance(): SpeechRecognitionClass {
@@ -18,6 +20,15 @@ export class SpeechRecognitionClass {
   public initialize(): void {
     // 返答辞書の初期化
     ReplyDict.getInstance().initialize();
+    // 形態素解析を初期化
+    // kuromoji.builderは毎回辞書をロードするっぽいので、一回だけ呼び出さないとボトルネックになってしまう。
+    kuromoji.builder({ dicPath: "/dict" }).build((err, tokenizer) => {
+      if(err){
+        alert("辞書のロードに失敗しました")
+        console.log(err)
+      }
+      this.kuromojiTokenizer = tokenizer;
+    })
     // 音声認識について設定
     let speechRecognitionFunc = ()=>{
       // TypeScriptではSpeechRecognitionについて型定義しないといけないらしい。 (参考: https://github.com/eguchi-asial/auto-text-recorder/blob/master/src/views/Home.vue)
@@ -51,7 +62,8 @@ export class SpeechRecognitionClass {
   }
   private reply(text): void {
     this.showLoadingCaption();
-    tokenize(text).then(tokens => {
+    const tokens = this.kuromojiTokenizer.tokenize(text);
+    //tokenize(text).then(tokens => {
       // Web Workersを使えばUIがカクつくのを防げるかと思ったけど、そんなことなかった...。
       // Workerは、worker_old.jsとworker.jsの2種類がある。worker.jsのほうが早いかと思ったけどそうでもない。
       const worker = new Worker('./src/worker.js');
@@ -88,7 +100,7 @@ export class SpeechRecognitionClass {
       let replyDictionary = ReplyDict.getInstance().getDictionary();
       //onsole.log(replyDictionary)
       worker.postMessage({dic: replyDictionary, tokens: tokens});
-    });
+    //});
   }
   private showListeningCaption(): void {
     const captionElm = document.getElementById("caption");
