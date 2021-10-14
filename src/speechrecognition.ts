@@ -4,7 +4,6 @@ import {MyUI} from "./myui";
 import {ReplyDict} from "./replydict";
 import { MotionNo } from './motionno';
 import { LAppModel } from './lappmodel';
-import { CoeFont } from './coefont';
 
 export let s_instance: SpeechRecognitionClass = null;
 export class SpeechRecognitionClass {
@@ -49,10 +48,6 @@ export class SpeechRecognitionClass {
     };
     // 音声認識を開始
     speechRecognitionFunc();
-    // DEBUG:
-    // プロキシではなくJSでアクセスしたい
-    CoeFont.getInstance().getWAVUrl();
-    //
   }
   private reply(text): void {
     this.showLoadingCaption();
