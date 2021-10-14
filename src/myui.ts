@@ -101,7 +101,7 @@ export class MyUI {
   }
   // ロード中の表示を消す
   public hideLoadingDialog(): void {
-    console.log("load finished");
+    // console.log("load finished");
     document.getElementById("loading").style.display = "none";
     // 音声認識を初期化・開始する
     SpeechRecognitionClass.getInstance().initialize();

@@ -3,6 +3,8 @@ import {tokenize} from "kuromojin";
 import {MyUI} from "./myui";
 import {ReplyDict} from "./replydict";
 import { MotionNo } from './motionno';
+import { LAppModel } from './lappmodel';
+import { CoeFont } from './coefont';
 
 export let s_instance: SpeechRecognitionClass = null;
 export class SpeechRecognitionClass {
@@ -47,6 +49,10 @@ export class SpeechRecognitionClass {
     };
     // 音声認識を開始
     speechRecognitionFunc();
+    // DEBUG:
+    // プロキシではなくJSでアクセスしたい
+    CoeFont.getInstance().getWAVUrl();
+    //
   }
   private reply(text): void {
     this.showLoadingCaption();
@@ -97,25 +103,59 @@ export class SpeechRecognitionClass {
       // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
       MotionNo.getInstance().setMotionNo(1);
       // 字幕の書き換え
-      const captionElm = document.getElementById("caption");
-      captionElm.innerHTML = text;
+      this.changeCaption(text);
     } else {
       // 音声再生テスト (音声の合成に1文字あたり5pt(=5円)かかるのでなるべく呼び出さない方向で...。初回クレジットが5万ptあるのでしばらくはなんとかなるはず。)
       fetch('https://tsumugu2626.xyz/coefont.php?text='+encodeURI(text)).then(response => response.json()).then(data=>{
         const WAVfileUrl = data.fileurl;
         if (WAVfileUrl!=undefined&&WAVfileUrl!=null) {
-          let audioElem = new Audio();
-          audioElem.src = WAVfileUrl;
-          audioElem.play();
+          // 字幕の書き換え
+          this.changeCaption(text);
+          //
+          const asyncFileLoad = async () => {
+            return fetch(WAVfileUrl).then(responce => {
+              return responce.arrayBuffer();
+            });
+          };
+          const asyncWavFileManager = (async () => {
+            let buffer = await asyncFileLoad();
+            // リップシンクのために音声ファイルのパスを指定
+            LAppModel.getInstance().setWAVArrayBuffer(buffer);
+            // 再生する   
+            this.AudioBufferPlayer(buffer, ()=>{
+              // 再生終了後にモーションを再生する (同時だと口が動かない)
+              MotionNo.getInstance().setMotionNo(1);
+            });        
+            //
+          })();
+          //let audioElem = new Audio();
+          //audioElem.src = WAVfileUrl;
+          //audioElem.play();
         } else {
           console.log("音声の生成に失敗しました", data);
+          // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
+          MotionNo.getInstance().setMotionNo(1);
+          // 字幕の書き換え
+          this.changeCaption(text);
+          //
         }
-        // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
-        MotionNo.getInstance().setMotionNo(1);
-        // 字幕の書き換え
-        const captionElm = document.getElementById("caption");
-        captionElm.innerHTML = text;
       });
     }
+  }
+  private AudioBufferPlayer(buffer, callback): void {
+    const { webkitAudioContext, AudioContext } = window as any;
+    let mAudioContext = AudioContext || webkitAudioContext;
+    var context = new mAudioContext();
+    var source = context.createBufferSource();
+    context.decodeAudioData(buffer, (buffer)=>{
+      source.buffer = buffer;
+      source.connect(context.destination);
+      source.start(0);
+      source.onended = callback
+    },(e)=>console.log("Error with decoding audio data" + e)); 
+  }
+  private changeCaption(text): void {
+    const captionElm = document.getElementById("caption");
+    captionElm.innerHTML = text;
   }
 }

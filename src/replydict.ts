@@ -28,6 +28,7 @@ export class ReplyDict {
     const col = collection(db, 'live2d_talk');
     this.docs = [];
     getDocs(col).then(res=>{
+      console.log(res);
       res.forEach(doc=>{
         this.docs.push(Object.assign({id: doc.id}, doc.data()))
       })

@@ -73,7 +73,14 @@ enum LoadStep {
  * ユーザーが実際に使用するモデルの実装クラス<br>
  * モデル生成、機能コンポーネント生成、更新処理とレンダリングの呼び出しを行う。
  */
+ export let s_instance: LAppModel = null;
 export class LAppModel extends CubismUserModel {
+  public static getInstance(): LAppModel {
+    if (s_instance == null) {
+      s_instance = new LAppModel();
+    }
+    return s_instance;
+  }
   /**
    * model3.jsonが置かれたディレクトリとファイルパスからモデルを生成する
    * @param dir
@@ -537,18 +544,18 @@ export class LAppModel extends CubismUserModel {
     }
 
     // リップシンクの設定
-    /*
     if (this._lipsync) {
       let value = 0.0; // リアルタイムでリップシンクを行う場合、システムから音量を取得して、0~1の範囲で値を入力します。
 
       this._wavFileHandler.update(deltaTimeSeconds);
       value = this._wavFileHandler.getRms();
+      // 音声合成APIから帰ってくるファイルの音量が小さいみたいなので大きくする
+      value = value*6;
 
       for (let i = 0; i < this._lipSyncIds.getSize(); ++i) {
         this._model.addParameterValueById(this._lipSyncIds.at(i), value, 0.8);
       }
     }
-    */
 
     // ポーズの設定
     if (this._pose != null) {
@@ -637,6 +644,11 @@ export class LAppModel extends CubismUserModel {
       autoDelete,
       priority
     );
+  }
+
+  public setWAVArrayBuffer(aArrayBuffer: ArrayBuffer): void {
+    //this._wavFileHandler.start(path);
+    this._wavFileHandler.startFromArrayBuffer(aArrayBuffer);
   }
 
   /**

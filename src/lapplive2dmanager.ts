@@ -201,7 +201,9 @@ export class LAppLive2DManager {
     modelJsonName += '.model3.json';
 
     this.releaseAllModel();
-    this._models.pushBack(new LAppModel());
+    //this._models.pushBack(new LAppModel());
+    // LAppModelはインスタンスを保持するように変更
+    this._models.pushBack(LAppModel.getInstance());
     this._models.at(0).loadAssets(modelPath, modelJsonName);
   }
 
