@@ -1,6 +1,5 @@
 var path = require('path');
 const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
 module.exports = {
   target: ['web', 'es5'],
   entry: './src/main.ts',
@@ -27,9 +26,6 @@ module.exports = {
   plugins: [
     new webpack.ProvidePlugin({
       process: 'process/browser',
-    }),
-    new Dotenv({
-      systemvars: true
     })
   ],
   devServer: {
