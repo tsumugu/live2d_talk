@@ -4,7 +4,10 @@ import kuromoji from "kuromoji";
 export let s_instance: MyUI = null;
 export class MyUI {
   private kuromojiTokenizer: any = null;
-  public isMuting: Boolean = true;
+  private isMuting: Boolean = true;
+  private isKuromojiDictionaryLoadFin: Boolean = false;
+  private isModelLoadFin: Boolean = false;
+
   constructor() {
   }
   public static getInstance(): MyUI {
@@ -106,7 +109,7 @@ export class MyUI {
         console.log(err)
       }
       this.kuromojiTokenizer = tokenizer;
-      this.hideLoadingDialog();
+      this.finishLoadingKuromojiDictionary();
     })
   }
   public getKuromojiTokenizer(): any {
@@ -115,11 +118,20 @@ export class MyUI {
   public getIsMuting() {
     return this.isMuting;
   }
+  public finishLoadingKuromojiDictionary(): void {
+    console.log("kuromoji dictionary load finished");
+    this.isKuromojiDictionaryLoadFin = true;
+    this.hideLoadingDialog();
+  }
+  public finishLoadingModel(): void {
+    console.log("model load finished");
+    this.isModelLoadFin = true;
+    this.hideLoadingDialog();
+  }
   // ロード中の表示を消す
   public hideLoadingDialog(): void {
-    console.log("model load finished");
-    if (this.kuromojiTokenizer!=null) {
-      console.log("kuromoji dictionary load finished");
+    if (this.isKuromojiDictionaryLoadFin&&this.isModelLoadFin) {
+      console.log("hide loading");
       document.getElementById("loading").style.display = "none";
       // 音声認識を初期化・開始する
       SpeechRecognitionClass.getInstance().initialize();

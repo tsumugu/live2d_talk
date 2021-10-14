@@ -420,7 +420,7 @@ export class LAppModel extends CubismUserModel {
             // ロード完了
             this._state = LoadStep.CompleteSetup;
             // ロード中の表示を消す
-            MyUI.getInstance().hideLoadingDialog();
+            MyUI.getInstance().finishLoadingModel();
           }
         };
 
