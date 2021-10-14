@@ -1,7 +1,9 @@
 import { SpeechRecognitionClass } from './speechrecognition';
+import kuromoji from "kuromoji";
 
 export let s_instance: MyUI = null;
 export class MyUI {
+  private kuromojiTokenizer: any = null;
   public isMuting: Boolean = true;
   constructor() {
   }
@@ -95,15 +97,32 @@ export class MyUI {
         this.isMuting = true;
       }
     });
+
+    // 形態素解析を初期化
+    // kuromoji.builderは毎回辞書をロードするっぽいので、一回だけ呼び出さないとボトルネックになってしまう。
+    kuromoji.builder({ dicPath: "/dict" }).build((err, tokenizer) => {
+      if(err){
+        alert("辞書のロードに失敗しました")
+        console.log(err)
+      }
+      this.kuromojiTokenizer = tokenizer;
+      this.hideLoadingDialog();
+    })
+  }
+  public getKuromojiTokenizer(): any {
+    return this.kuromojiTokenizer;
   }
   public getIsMuting() {
     return this.isMuting;
   }
   // ロード中の表示を消す
   public hideLoadingDialog(): void {
-    // console.log("load finished");
-    document.getElementById("loading").style.display = "none";
-    // 音声認識を初期化・開始する
-    SpeechRecognitionClass.getInstance().initialize();
+    console.log("model load finished");
+    if (this.kuromojiTokenizer!=null) {
+      console.log("kuromoji dictionary load finished");
+      document.getElementById("loading").style.display = "none";
+      // 音声認識を初期化・開始する
+      SpeechRecognitionClass.getInstance().initialize();
+    }
   }
 }
