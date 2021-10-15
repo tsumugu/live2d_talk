@@ -99,7 +99,7 @@ export class SpeechRecognitionClass {
   private speak(text): void {
     if (MyUI.getInstance().getIsMuting()) {
       // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
-      MotionNo.getInstance().setMotionNo(1);
+      MotionNo.getInstance().setMotionNo(0);
       // 字幕の書き換え
       this.changeCaption(text);
     } else {
@@ -122,7 +122,7 @@ export class SpeechRecognitionClass {
             // 再生する   
             this.AudioBufferPlayer(buffer, ()=>{
               // 再生終了後にモーションを再生する (同時だと口が動かない)
-              MotionNo.getInstance().setMotionNo(1);
+              MotionNo.getInstance().setMotionNo(0);
             });        
             //
           })();
@@ -132,7 +132,7 @@ export class SpeechRecognitionClass {
         } else {
           console.log("音声の生成に失敗しました", data);
           // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
-          MotionNo.getInstance().setMotionNo(1);
+          MotionNo.getInstance().setMotionNo(0);
           // 字幕の書き換え
           this.changeCaption(text);
           //

@@ -1,0 +1,30 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "kkk.moc3",
+		"Textures": [
+			"kkk.2048/texture_00.png"
+		],
+		"Physics": "kkk.physics3.json",
+		"DisplayInfo": "kkk.cdi3.json",
+		"Motions": {
+			"Idle": [
+				{
+					"File": "motions/0.motion3.json",
+					"FadeInTime": 0.5,
+					"FadeOutTime": 0.5
+				}
+			]
+		}
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": [
+				"ParamEyeROpen",
+				"ParamEyeLOpen"
+			]
+		}
+	]
+}

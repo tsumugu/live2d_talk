@@ -46,17 +46,17 @@ export const BackImageName = 'bg.png';
 // モデルを配置したディレクトリ名の配列
 // ディレクトリ名とmodel3.jsonの名前を一致させておくこと
 // 今回は切り替えをしないので1つだけ
-export const ModelDir: string[] = ['Hiyori'];
-//export const ModelDir: string[] = ['Kanna'];
+//export const ModelDir: string[] = ['Hiyori'];
+export const ModelDir: string[] = ['kkk'];
 export const ModelDirSize: number = ModelDir.length;
 
 // 外部定義ファイル（json）と合わせる (モーション制作はがんばる)
 export const MotionGroupIdle = 'Idle'; // アイドリング
-export const MotionGroupTapBody = 'TapBody'; // 体をタップしたとき
+//export const MotionGroupTapBody = 'TapBody'; // 体をタップしたとき
 
 // 外部定義ファイル（json）と合わせる
-export const HitAreaNameHead = 'Head';
-export const HitAreaNameBody = 'Body';
+//export const HitAreaNameHead = 'Head';
+//export const HitAreaNameBody = 'Body';
 
 // モーションの優先度定数
 export const PriorityNone = 0;

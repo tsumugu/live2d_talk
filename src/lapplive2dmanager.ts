@@ -145,10 +145,10 @@ export class LAppLive2DManager {
 
       if (model.getModel()) {
         // Hiyori
-        projection.scale(2.5, width/height*2.5);
-        projection.translate(0, width/height*-1.5);
-        // projection.scale(0.7, width/height*0.7);
-        // projection.translate(0, width/height*-0.1);
+        //projection.scale(2.5, width/height*2.5);
+        //projection.translate(0, width/height*-1.5);
+        projection.scale(0.7, width/height*0.7);
+        projection.translate(0, width/height*-0.1);
         /*
         if (model.getModel().getCanvasWidth() > 1.0 && width < height) {
           // 横に長いモデルを縦長ウィンドウに表示する際モデルの横サイズでscaleを算出する
