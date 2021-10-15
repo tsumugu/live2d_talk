@@ -1,48 +1,41 @@
 let isIncludeList = (tokensBasicForm, saidList, index)=>{
   if (saidList.filter(w=>tokensBasicForm.includes(w)).length==saidList.length) {
-    return index
+    return index;
   }
   return false;
 }
-let searchReply = (reply_dictionary, tokensBasicForm, idList, valueList)=>{
-  let resIndexList = valueList.map((saidList, index)=>isIncludeList(tokensBasicForm, saidList, index)).filter(Boolean)
-  let resIdIndex = resIndexList[0];
-  if (resIdIndex==undefined) {
+let searchReply = (replyDictionary, tokensBasicForm, searchDict)=>{
+  let keys = Object.keys(searchDict);
+  let resIndexList = keys.map(saidListStr=>isIncludeList(tokensBasicForm, saidListStr.split(","), saidListStr)).filter(Boolean);
+  if (resIndexList.length<=0) {
     return undefined;
   }
-  let resIdWithIndex = idList[resIdIndex];
-  if (resIdWithIndex==undefined) {
+  let replyDictionaryIndex = searchDict[resIndexList[0]];
+  if (replyDictionaryIndex==undefined) {
     return undefined;
   }
-  let resId = resIdWithIndex.split('-')[1];
-  if (resId==undefined) {
-    return undefined;
-  }
-  return reply_dictionary.filter(e=>e.id==resId)[0];
+  return replyDictionary[replyDictionaryIndex];
 }
 self.onmessage = (e)=>{
-  let reply_dictionary = e.data.dic;
+  //const startTime = performance.now();
+  let replyDictionary = e.data.dic;
+  let searchDict = e.data.search;
   let tokens = e.data.tokens;
   let tokensBasicForm = tokens.map(e=>e.basic_form);
   let tokensReadingForm = tokens.map(e=>e.reading);
-  if (reply_dictionary==undefined||reply_dictionary.length<=0||tokensBasicForm==undefined) {
+  if (replyDictionary==undefined||replyDictionary.length<=0||searchDict==undefined||searchDict.length<=0||tokensBasicForm==undefined) {
     self.postMessage([]);
     return false;
   }
-  // 探索のための配列を生成する。(1次元配列にすることで高速化を狙う。)
-  let idList = [];
-  let valueList = [];
-  reply_dictionary.forEach(e=>{
-    e.utterance.forEach((f, i)=>{
-      idList.push(i.toString()+"-"+e.id);
-      valueList.push(Object.values(f))
-    })
-  });
-  let replyObj = searchReply(reply_dictionary, tokensBasicForm, idList, valueList);
+  let replyObj = searchReply(replyDictionary, tokensBasicForm, searchDict);
   if (replyObj==undefined) {
-    let replyObj_reading = searchReply(reply_dictionary, tokensReadingForm, idList, valueList);
+    let replyObj_reading = searchReply(replyDictionary, tokensReadingForm, searchDict);
     self.postMessage(replyObj_reading);
+    return false;
   } else {
     self.postMessage(replyObj);
+    //const endTime = performance.now();
+    //console.log(endTime - startTime);
+    return false;
   }
-};
+}

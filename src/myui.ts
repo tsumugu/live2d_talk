@@ -1,4 +1,5 @@
 import { SpeechRecognitionClass } from './speechrecognition';
+import {ReplyDict} from "./replydict";
 import kuromoji from "kuromoji";
 
 export let s_instance: MyUI = null;
@@ -7,6 +8,7 @@ export class MyUI {
   private isMuting: Boolean = true;
   private isKuromojiDictionaryLoadFin: Boolean = false;
   private isModelLoadFin: Boolean = false;
+  private isReplyDictLoadFin: Boolean = false;
 
   constructor() {
   }
@@ -15,6 +17,12 @@ export class MyUI {
       s_instance = new MyUI();
     }
     return s_instance;
+  }
+  public getKuromojiTokenizer(): any {
+    return this.kuromojiTokenizer;
+  }
+  public getIsMuting() {
+    return this.isMuting;
   }
   public initialize(): void {
     // 画面にマウスオーバーされたときだけUIを表示するための処理
@@ -111,14 +119,13 @@ export class MyUI {
       this.kuromojiTokenizer = tokenizer;
       this.finishLoadingKuromojiDictionary();
     })
+
+    // 返答辞書の初期化
+    ReplyDict.getInstance().initialize();
+    // デバッグ用辞書を使うにはこっちを呼び出し
+    //ReplyDict.getInstance().initialize_DEBUG();
   }
-  public getKuromojiTokenizer(): any {
-    return this.kuromojiTokenizer;
-  }
-  public getIsMuting() {
-    return this.isMuting;
-  }
-  public finishLoadingKuromojiDictionary(): void {
+  private finishLoadingKuromojiDictionary(): void {
     console.log("kuromoji dictionary load finished");
     this.isKuromojiDictionaryLoadFin = true;
     this.hideLoadingDialog();
@@ -128,9 +135,14 @@ export class MyUI {
     this.isModelLoadFin = true;
     this.hideLoadingDialog();
   }
+  public finishReplyDict(): void {
+    console.log("reply dict load finished");
+    this.isReplyDictLoadFin = true;
+    this.hideLoadingDialog();
+  }
   // ロード中の表示を消す
-  public hideLoadingDialog(): void {
-    if (this.isKuromojiDictionaryLoadFin&&this.isModelLoadFin) {
+  private hideLoadingDialog(): void {
+    if (this.isKuromojiDictionaryLoadFin&&this.isModelLoadFin&&this.isReplyDictLoadFin) {
       console.log("hide loading");
       document.getElementById("loading").style.display = "none";
       // 音声認識を初期化・開始する

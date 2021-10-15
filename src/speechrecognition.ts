@@ -7,6 +7,7 @@ import { LAppModel } from './lappmodel';
 
 export let s_instance: SpeechRecognitionClass = null;
 export class SpeechRecognitionClass {
+  private worker: Worker;
   constructor() {
   }
   public static getInstance(): SpeechRecognitionClass {
@@ -16,8 +17,37 @@ export class SpeechRecognitionClass {
     return s_instance;
   }
   public initialize(): void {
-    // 返答辞書の初期化
-    ReplyDict.getInstance().initialize();
+    // workerを作成 (Web Workersを使えばLive2Dのカクつきを防げるかと思ったけど、そんなことなかった...。)
+    this.worker = new Worker('./src/worker.js');
+    const _this = this;
+    this.worker.addEventListener('message', function(e) {
+      let replyObj = e.data;
+      console.log(replyObj);
+      if (replyObj!=undefined) {
+        if (replyObj.reply!=undefined) {
+          _this.speak(replyObj.reply);
+        } else {
+          _this.speak("理解できませんでした...");
+        }
+      } else {
+        _this.speak("理解できませんでした...");
+      }
+      /* else {
+        // 返答候補がなかったらChaplus API(雑談API)に投げる
+        const obj = {utterance: text};
+        const method = "POST";
+        const body = JSON.stringify(obj);
+        const headers = {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        };
+        fetch("https://tsumugu2626.xyz/chaplus.php?apikey=615ef2feaa3b3", {method, headers, body}).then(res=>{
+          res.text().then((resStr)=>{
+            _this.speak(resStr);
+          });
+        }).catch(error=>console.error(error));    
+      }*/
+    }, false);
     // 音声認識について設定
     let speechRecognitionFunc = ()=>{
       // TypeScriptではSpeechRecognitionについて型定義しないといけないらしい。 (参考: https://github.com/eguchi-asial/auto-text-recorder/blob/master/src/views/Home.vue)
@@ -52,44 +82,10 @@ export class SpeechRecognitionClass {
   private reply(text): void {
     this.showLoadingCaption();
     const tokens = MyUI.getInstance().getKuromojiTokenizer().tokenize(text);
-    //tokenize(text).then(tokens => {
-      // Web Workersを使えばUIがカクつくのを防げるかと思ったけど、そんなことなかった...。
-      // Workerは、worker_old.jsとworker.jsの2種類がある。worker.jsのほうが早いかと思ったけどそうでもない。
-      const worker = new Worker('./src/worker.js');
-      const _this = this;
-      worker.addEventListener('message', function(e) {
-        let replyObj = e.data;
-        console.log(replyObj);
-        if (replyObj!=undefined) {
-          if (replyObj.reply!=undefined) {
-            _this.speak(replyObj.reply);
-          } else {
-            _this.speak("理解できませんでした...");
-          }
-        } else {
-          _this.speak("理解できませんでした...");
-        }
-        /* else {
-          // 返答候補がなかったらChaplus API(雑談API)に投げる
-          const obj = {utterance: text};
-          const method = "POST";
-          const body = JSON.stringify(obj);
-          const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          };
-          fetch("https://tsumugu2626.xyz/chaplus.php?apikey=615ef2feaa3b3", {method, headers, body}).then(res=>{
-            res.text().then((resStr)=>{
-              _this.speak(resStr);
-            });
-          }).catch(error=>console.error(error));    
-        }*/
-      }, false);
-      // getDictionary_DEBUG()はデバッグ用
-      let replyDictionary = ReplyDict.getInstance().getDictionary();
-      //onsole.log(replyDictionary)
-      worker.postMessage({dic: replyDictionary, tokens: tokens});
-    //});
+    let replyDictionary = ReplyDict.getInstance().getDictionary();
+    let replySearchObj = ReplyDict.getInstance().getSearchObj();
+    console.log(replyDictionary, replySearchObj);
+    this.worker.postMessage({dic: replyDictionary, search: replySearchObj, tokens: tokens});
   }
   private showListeningCaption(): void {
     const captionElm = document.getElementById("caption");

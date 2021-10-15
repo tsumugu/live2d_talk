@@ -3,6 +3,7 @@ let isMatchList = (said, tokensBasicForm)=>{
   return said.filter(saidList=>saidList.filter(w=>tokensBasicForm.includes(w)).length==saidList.length).length!=0;
 }
 self.onmessage = (e)=>{
+  const startTime = performance.now();
   let reply_dictionary = e.data.dic;
   let tokens = e.data.tokens;
   let tokensBasicForm = tokens.map(e=>e.basic_form);
@@ -18,5 +19,7 @@ self.onmessage = (e)=>{
     self.postMessage(replyObj_reading);
   } else {
     self.postMessage(replyObj);
+    const endTime = performance.now();
+    console.log(endTime - startTime);
   }
 };
