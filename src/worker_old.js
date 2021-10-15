@@ -6,7 +6,12 @@ self.onmessage = (e)=>{
   const startTime = performance.now();
   let reply_dictionary = e.data.dic;
   let tokens = e.data.tokens;
-  let tokensBasicForm = tokens.map(e=>e.basic_form);
+  let tokensBasicForm = tokens.map(e=>{
+    if (e.basic_form==undefined) {
+      return e.surface_form;
+    }
+    return e.basic_form;
+  });
   let tokensReadingForm = tokens.map(e=>e.reading);
   if (reply_dictionary==undefined||tokensBasicForm==undefined) {
     self.postMessage([]);
@@ -17,6 +22,8 @@ self.onmessage = (e)=>{
   if (replyObj==undefined) {
     let replyObj_reading = reply_dictionary.filter(e=>isMatchList(e.utterance.map(f=>Object.values(f)), tokensReadingForm))[0];
     self.postMessage(replyObj_reading);
+    const endTime = performance.now();
+    console.log(endTime - startTime);
   } else {
     self.postMessage(replyObj);
     const endTime = performance.now();

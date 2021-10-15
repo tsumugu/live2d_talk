@@ -18,7 +18,8 @@ export class SpeechRecognitionClass {
   }
   public initialize(): void {
     // workerを作成 (Web Workersを使えばLive2Dのカクつきを防げるかと思ったけど、そんなことなかった...。)
-    this.worker = new Worker('./src/worker.js');
+    // workerとworker_oldがあって、worker_oldのほうが高速
+    this.worker = new Worker('./src/worker_old.js');
     const _this = this;
     this.worker.addEventListener('message', function(e) {
       let replyObj = e.data;

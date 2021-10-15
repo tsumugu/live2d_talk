@@ -80,7 +80,7 @@ export class ReplyDict {
       })
     }
     let d2 = {
-      "id": this.getUniqueStr()+size.toString(),
+      "id": this.getUniqueStr()+","+size.toString(),
       "utterance": [["これ", "テスト"]],
       "reply": "私の名前は花子です",
       "emotion_name": "fun"
