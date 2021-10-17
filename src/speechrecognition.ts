@@ -97,13 +97,15 @@ export class SpeechRecognitionClass {
     captionElm.innerHTML = "loading...";
   }
   private speak(text): void {
+    let motionN = 0;
     if (MyUI.getInstance().getIsMuting()) {
       // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
-      MotionNo.getInstance().setMotionNo(0);
+      MotionNo.getInstance().setMotionNo(motionN);
       // 字幕の書き換え
       this.changeCaption(text);
     } else {
-      // 音声再生テスト (音声の合成に1文字あたり5pt(=5円)かかるのでなるべく呼び出さない方向で...。初回クレジットが5万ptあるのでしばらくはなんとかなるはず。)
+      // 音声合成 (音声の合成に1文字あたり5pt(=5円)かかるのでなるべく呼び出さない方向で...。初回クレジットが5万ptあるのでしばらくはなんとかなるはず。)
+      // 直接CoeFont APIにアクセスしたいが、CORSでエラーになってしまうので仕方なくプロキシ
       fetch('https://tsumugu2626.xyz/coefont.php?text='+encodeURI(text)).then(response => response.json()).then(data=>{
         const WAVfileUrl = data.fileurl;
         if (WAVfileUrl!=undefined&&WAVfileUrl!=null) {
@@ -122,7 +124,7 @@ export class SpeechRecognitionClass {
             // 再生する   
             this.AudioBufferPlayer(buffer, ()=>{
               // 再生終了後にモーションを再生する (同時だと口が動かない)
-              MotionNo.getInstance().setMotionNo(0);
+              MotionNo.getInstance().setMotionNo(motionN);
             });        
             //
           })();
@@ -132,7 +134,7 @@ export class SpeechRecognitionClass {
         } else {
           console.log("音声の生成に失敗しました", data);
           // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
-          MotionNo.getInstance().setMotionNo(0);
+          MotionNo.getInstance().setMotionNo(motionN);
           // 字幕の書き換え
           this.changeCaption(text);
           //

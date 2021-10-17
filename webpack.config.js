@@ -15,6 +15,7 @@ module.exports = {
     }
   },
   module: {
+    noParse: /build\/clmtrackr/,
     rules: [
       {
         test: /\.ts$/,

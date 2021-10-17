@@ -15,7 +15,7 @@
       padding: 0;
       position: absolute;
       top: 0;
-      z-index: 2;
+      z-index: 3;
       width: 100%;
       height: 110%;
       background-color: black;
@@ -32,7 +32,7 @@
     #ui {
       position: absolute;
       top: 0;
-      z-index: 1;
+      z-index: 2;
       width: 100%;
       height: 100%;
       opacity: 0;
@@ -82,7 +82,7 @@
       position: absolute;
       bottom: 1rem;
       padding: 2rem;
-      z-index: 0;
+      z-index: 1;
       width: 100%;
       text-align: center;
       /*
@@ -96,6 +96,12 @@
       -webkit-text-stroke: 0.1rem black;
       /*color: #ffffff;
       -webkit-text-stroke: 0.1rem #f5b1aa;*/
+    }
+    #video {
+      position: absolute;
+      top: 0;
+      z-index: 0;
+      opacity: 0;
     }
   </style>
   <!-- Pollyfill script -->
@@ -116,6 +122,7 @@
     <span id="fullscreen-button"><span class="material-icons icon-fullscreen">fullscreen</span></span>
   </div>
   <div id="caption"></div>
+  <video id="video"></video>
   <!-- Build script -->
   <script src="./dist/bundle.js" defer></script>
 </body>

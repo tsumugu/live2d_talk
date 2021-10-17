@@ -42,6 +42,7 @@ import { LAppWavFileHandler } from './lappwavfilehandler';
 
 import { MyUI } from './myui';
 import { MotionNo } from './motionno';
+import { EyeTracking } from './eyetracking';
 
 enum LoadStep {
   LoadAssets,
@@ -527,11 +528,10 @@ export class LAppModel extends CubismUserModel {
       this._idParamBodyAngleX,
       this._dragX * 10
     ); // -10から10の値を加える
-
-    // ドラッグによる目の向きの調整
-    this._model.addParameterValueById(this._idParamEyeBallX, this._dragX); // -1から1の値を加える
-    this._model.addParameterValueById(this._idParamEyeBallY, this._dragY);
     */
+    // カメラで認識した顔の位置に合わせて眼球を動かす
+    this._model.addParameterValueById(this._idParamEyeBallX, EyeTracking.getInstance().getEyeX());
+    this._model.addParameterValueById(this._idParamEyeBallY, EyeTracking.getInstance().getEyeY());
 
     // 呼吸など
     if (this._breath != null) {

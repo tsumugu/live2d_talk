@@ -1,6 +1,7 @@
+import kuromoji from "kuromoji";
 import { SpeechRecognitionClass } from './speechrecognition';
 import {ReplyDict} from "./replydict";
-import kuromoji from "kuromoji";
+import { EyeTracking } from './eyetracking';
 
 export let s_instance: MyUI = null;
 export class MyUI {
@@ -111,19 +112,23 @@ export class MyUI {
 
     // 形態素解析を初期化
     // kuromoji.builderは毎回辞書をロードするっぽいので、一回だけ呼び出さないとボトルネックになってしまう。
-    kuromoji.builder({ dicPath: "/dict" }).build((err, tokenizer) => {
+    kuromoji.builder({ dicPath: "/Resources/kuromoji-dict" }).build((err, tokenizer) => {
       if(err){
         alert("辞書のロードに失敗しました")
         console.log(err)
+      } else {
+        this.kuromojiTokenizer = tokenizer;
+        this.finishLoadingKuromojiDictionary();
       }
-      this.kuromojiTokenizer = tokenizer;
-      this.finishLoadingKuromojiDictionary();
     })
 
     // 返答辞書の初期化
     ReplyDict.getInstance().initialize();
     // デバッグ用辞書を使うにはこっちを呼び出し
     //ReplyDict.getInstance().initialize_DEBUG();
+
+    // 目で顔を追うやつを初期化
+    EyeTracking.getInstance().initialize();
   }
   private finishLoadingKuromojiDictionary(): void {
     console.log("kuromoji dictionary load finished");
