@@ -89,9 +89,13 @@ export class LAppLive2DManager {
         // Hiyori
         //projection.scale(2.5, width/height*2.5);
         //projection.translate(0, width/height*-1.5);
-        projection.scale(0.7, width/height*0.7);
+        // kkk
+        //projection.scale(0.7, width/height*0.7);
+        //projection.translate(0, width/height*-0.1);
+        // imakara
+        console.log(width/height);
+        projection.scale(0.65, width/height*0.65);
         projection.translate(0, width/height*-0.1);
-
         // 必要があればここで乗算
         if (this._viewMatrix != null) {
           projection.multiplyByMatrix(this._viewMatrix);
