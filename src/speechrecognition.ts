@@ -18,36 +18,23 @@ export class SpeechRecognitionClass {
   }
   public initialize(): void {
     // workerを作成 (Web Workersを使えばLive2Dのカクつきを防げるかと思ったけど、そんなことなかった...。)
-    // workerとworker_oldがあって、worker_oldのほうが高速
-    this.worker = new Worker('./src/worker_old.js');
+    // workerとworker_oldがあって、workerのほうが高速
+    this.worker = new Worker('./src/worker.js');
     const _this = this;
     this.worker.addEventListener('message', function(e) {
       let replyObj = e.data;
       console.log(replyObj);
       if (replyObj!=undefined) {
         if (replyObj.reply!=undefined) {
-          _this.speak(replyObj.reply);
+          _this.speak(replyObj.reply, replyObj.emotion_name);
         } else {
-          _this.speak("理解できませんでした...");
+          //_this.speak("理解できませんでした", "sad");
+          _this.replyfromapi(replyObj);
         }
       } else {
-        _this.speak("理解できませんでした...");
+        //_this.speak("理解できませんでした", "sad");
+        _this.replyfromapi(replyObj);
       }
-      /* else {
-        // 返答候補がなかったらChaplus API(雑談API)に投げる
-        const obj = {utterance: text};
-        const method = "POST";
-        const body = JSON.stringify(obj);
-        const headers = {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        };
-        fetch("https://tsumugu2626.xyz/chaplus.php?apikey=615ef2feaa3b3", {method, headers, body}).then(res=>{
-          res.text().then((resStr)=>{
-            _this.speak(resStr);
-          });
-        }).catch(error=>console.error(error));    
-      }*/
     }, false);
     // 音声認識について設定
     let speechRecognitionFunc = ()=>{
@@ -85,22 +72,38 @@ export class SpeechRecognitionClass {
     const tokens = MyUI.getInstance().getKuromojiTokenizer().tokenize(text);
     let replyDictionary = ReplyDict.getInstance().getDictionary();
     let replySearchObj = ReplyDict.getInstance().getSearchObj();
-    console.log(replyDictionary, replySearchObj);
-    this.worker.postMessage({dic: replyDictionary, search: replySearchObj, tokens: tokens});
+    this.worker.postMessage({dic: replyDictionary, search: replySearchObj, text: text, tokens: tokens});
+  }
+  private replyfromapi(text): void {
+    console.log(text);
+    // 返答候補がなかったときに「理解できません」とか言うのは味気ないので、Chaplus API(雑談API)に投げてなにかしら返答する。
+    const obj = {utterance: text};
+    const method = "POST";
+    const body = JSON.stringify(obj);
+    const headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    };
+    fetch("https://tsumugu2626.xyz/chaplus.php?apikey=615ef2feaa3b3", {method, headers, body}).then(res=>{
+      res.text().then((resStr)=>{
+        this.speak(resStr, "happy");
+      });
+    }).catch(error=>console.error(error));
   }
   private showListeningCaption(): void {
+    MotionNo.getInstance().setMotion("listening");
     const captionElm = document.getElementById("caption");
     captionElm.innerHTML = "listening...";
   }
   private showLoadingCaption(): void {
+    MotionNo.getInstance().setMotion("thinking");
     const captionElm = document.getElementById("caption");
     captionElm.innerHTML = "loading...";
   }
-  private speak(text): void {
-    let motionN = 0;
+  private speak(text, motionName): void {
     if (MyUI.getInstance().getIsMuting()) {
       // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
-      MotionNo.getInstance().setMotionNo(motionN);
+      MotionNo.getInstance().setMotion(motionName);
       // 字幕の書き換え
       this.changeCaption(text);
     } else {
@@ -124,7 +127,7 @@ export class SpeechRecognitionClass {
             // 再生する   
             this.AudioBufferPlayer(buffer, ()=>{
               // 再生終了後にモーションを再生する (同時だと口が動かない)
-              MotionNo.getInstance().setMotionNo(motionN);
+              MotionNo.getInstance().setMotion(motionName);
             });        
             //
           })();
@@ -134,7 +137,7 @@ export class SpeechRecognitionClass {
         } else {
           console.log("音声の生成に失敗しました", data);
           // モーション設定 (Groupについてはlappmodel.tsの464行目で変更可)
-          MotionNo.getInstance().setMotionNo(motionN);
+          MotionNo.getInstance().setMotion(motionName);
           // 字幕の書き換え
           this.changeCaption(text);
           //

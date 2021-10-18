@@ -73,64 +73,6 @@ export class LAppLive2DManager {
   }
 
   /**
-   * 画面をドラッグした時の処理
-   *
-   * @param x 画面のX座標
-   * @param y 画面のY座標
-   */
-  /*
-  public onDrag(x: number, y: number): void {
-    for (let i = 0; i < this._models.getSize(); i++) {
-      const model: LAppModel = this.getModel(i);
-
-      if (model) {
-        model.setDragging(x, y);
-      }
-    }
-  }
-  */
-
-  /**
-   * 画面をタップした時の処理
-   *
-   * @param x 画面のX座標
-   * @param y 画面のY座標
-   */
-  /*
-  public onTap(x: number, y: number): void {
-    if (LAppDefine.DebugLogEnable) {
-      LAppPal.printMessage(
-        `[APP]tap point: {x: ${x.toFixed(2)} y: ${y.toFixed(2)}}`
-      );
-    }
-
-    for (let i = 0; i < this._models.getSize(); i++) {
-      if (this._models.at(i).hitTest(LAppDefine.HitAreaNameHead, x, y)) {
-        if (LAppDefine.DebugLogEnable) {
-          LAppPal.printMessage(
-            `[APP]hit area: [${LAppDefine.HitAreaNameHead}]`
-          );
-        }
-        this._models.at(i).setRandomExpression();
-      } else if (this._models.at(i).hitTest(LAppDefine.HitAreaNameBody, x, y)) {
-        if (LAppDefine.DebugLogEnable) {
-          LAppPal.printMessage(
-            `[APP]hit area: [${LAppDefine.HitAreaNameBody}]`
-          );
-        }
-        this._models
-          .at(i)
-          .startRandomMotion(
-            LAppDefine.MotionGroupTapBody,
-            LAppDefine.PriorityNormal,
-            this._finishedMotion
-          );
-      }
-    }
-  }
-  */
-
-  /**
    * 画面を更新するときの処理
    * モデルの更新処理及び描画処理を行う
    */
@@ -149,15 +91,6 @@ export class LAppLive2DManager {
         //projection.translate(0, width/height*-1.5);
         projection.scale(0.7, width/height*0.7);
         projection.translate(0, width/height*-0.1);
-        /*
-        if (model.getModel().getCanvasWidth() > 1.0 && width < height) {
-          // 横に長いモデルを縦長ウィンドウに表示する際モデルの横サイズでscaleを算出する
-          model.getModelMatrix().setWidth(2.0);
-          projection.scale(1.0, width / height);
-        } else {
-          projection.scale(height / width, 1.0);
-        }
-        */
 
         // 必要があればここで乗算
         if (this._viewMatrix != null) {
@@ -169,17 +102,6 @@ export class LAppLive2DManager {
       model.draw(projection); // 参照渡しなのでprojectionは変質する。
     }
   }
-
-  /**
-   * 次のシーンに切りかえる
-   * サンプルアプリケーションではモデルセットの切り替えを行う。
-   */
-  /*
-  public nextScene(): void {
-    const no: number = (this._sceneIndex + 1) % LAppDefine.ModelDirSize;
-    this.changeScene(no);
-  }
-  */
 
   /**
    * シーンを切り替える
@@ -226,19 +148,4 @@ export class LAppLive2DManager {
   _viewMatrix: CubismMatrix44; // モデル描画に用いるview行列
   _models: csmVector<LAppModel>; // モデルインスタンスのコンテナ
   _sceneIndex: number; // 表示するシーンのインデックス値
-  // モーション再生
-  /*
-  // モーション再生終了のコールバック関数
-  _finishedMotion = (self: ACubismMotion): void => {
-    LAppPal.printMessage('Motion Finished:');
-    console.log(self);
-  };
-  this._models
-  .at(i)
-  .startRandomMotion(
-    LAppDefine.MotionGroupTapBody,
-    LAppDefine.PriorityNormal,
-    this._finishedMotion
-  );
-  */
 }

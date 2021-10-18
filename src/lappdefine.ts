@@ -34,29 +34,16 @@ export const ResourcesPath = './Resources/';
 
 // モデルの後ろにある背景の画像ファイル
 export const BackImageName = 'bg.png';
-//export const BackImageName = 'bg_white.png';
-
-// 歯車
-//export const GearImageName = 'icon_gear.png';
-
-// 終了ボタン
-//export const PowerImageName = 'CloseNormal.png';
 
 // モデル定義---------------------------------------------
 // モデルを配置したディレクトリ名の配列
 // ディレクトリ名とmodel3.jsonの名前を一致させておくこと
-// 今回は切り替えをしないので1つだけ
 //export const ModelDir: string[] = ['Hiyori'];
 export const ModelDir: string[] = ['kkk'];
 export const ModelDirSize: number = ModelDir.length;
 
 // 外部定義ファイル（json）と合わせる (モーション制作はがんばる)
 export const MotionGroupIdle = 'Idle'; // アイドリング
-//export const MotionGroupTapBody = 'TapBody'; // 体をタップしたとき
-
-// 外部定義ファイル（json）と合わせる
-//export const HitAreaNameHead = 'Head';
-//export const HitAreaNameBody = 'Body';
 
 // モーションの優先度定数
 export const PriorityNone = 0;

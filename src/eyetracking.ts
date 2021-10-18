@@ -7,12 +7,14 @@ export class EyeTracking {
   private w: number = 0.0;
   private h: number = 0.0;
   private resetTimerId: any = null;
+  
   public static getInstance(): EyeTracking {
     if (s_instance == null) {
       s_instance = new EyeTracking();
     }
     return s_instance;
   }
+
   public initialize(): void {
     // Property 'srcObject' does not exist on type 'HTMLElement'.などとエラーが出るのでHTMLElementをHTMLVideoElementにキャスト
     let video = document.getElementById("video") as HTMLVideoElement;
@@ -40,6 +42,7 @@ export class EyeTracking {
       console.log(err.name+": "+err.message);
     });
   }
+
   private initializeFaceDetector(video): void {
     // 顔認識を開始する
     var ctracker = new clm.tracker();
@@ -79,6 +82,7 @@ export class EyeTracking {
     }
     drawLoop();
   }
+
   // -1~1の範囲に変換する関数
   private convertScreenPosToLive2DPram(wh, xy): number {
     // -1.0~1.0の21段階
@@ -86,6 +90,8 @@ export class EyeTracking {
     const step = wh/num*num;
     return ((xy/step)-0.5)*-2;
   }
+
+  // lappmodel.tsの498, 499行目から呼び出される
   public getEyeX(): number {
     return this.eyeX;
   }

@@ -13,6 +13,36 @@
 					"File": "motions/0.motion3.json",
 					"FadeInTime": 0.5,
 					"FadeOutTime": 0.5
+				},
+				{
+					"File": "motions/1.motion3.json",
+					"FadeInTime": 0.5,
+					"FadeOutTime": 0.5
+				},
+				{
+					"File": "motions/2.motion3.json",
+					"FadeInTime": 0.5,
+					"FadeOutTime": 0.5
+				},
+				{
+					"File": "motions/3.motion3.json",
+					"FadeInTime": 0.5,
+					"FadeOutTime": 0.5
+				},
+				{
+					"File": "motions/4.motion3.json",
+					"FadeInTime": 0.5,
+					"FadeOutTime": 0.5
+				},
+				{
+					"File": "motions/5.motion3.json",
+					"FadeInTime": 0.5,
+					"FadeOutTime": 0.5
+				},
+				{
+					"File": "motions/6.motion3.json",
+					"FadeInTime": 0.5,
+					"FadeOutTime": 0.5
 				}
 			]
 		}

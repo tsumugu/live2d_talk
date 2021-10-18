@@ -1,10 +1,28 @@
-// 返答リストの質問文(reply_dictionary[i].said)の中に、ユーザからの質問文(tokensBasicForm)が含まれているかを調べる関数
-let isMatchList = (said, tokensBasicForm)=>{
-  return said.filter(saidList=>saidList.filter(w=>tokensBasicForm.includes(w)).length==saidList.length).length!=0;
+// 処理が遅くてボツになったほうのworker。実際に使われているのはworker.js
+let isIncludeList = (tokensBasicForm, saidList)=>{
+  if (saidList.split(",").filter(w=>tokensBasicForm.includes(w)).length==saidList.length) {
+    return saidList;
+  }
+  return false;
+}
+// keyがbasicform、bodyがreplyDictionaryのindexになっている配列のsearchDictを使って検索する
+let searchReply = (replyDictionary, tokensBasicForm, searchDict)=>{
+  let keys = Object.keys(searchDict);
+  let resIndexList = keys.map(saidList=>isIncludeList(tokensBasicForm, saidList)).filter(Boolean);
+  if (resIndexList.length<=0) {
+    return undefined;
+  }
+  let replyDictionaryIndex = searchDict[resIndexList[0]];
+  if (replyDictionaryIndex==undefined) {
+    return undefined;
+  }
+  return replyDictionary[replyDictionaryIndex];
 }
 self.onmessage = (e)=>{
+  // ここらへんはworker.jsと同じ
   const startTime = performance.now();
-  let reply_dictionary = e.data.dic;
+  let replyDictionary = e.data.dic;
+  let searchDict = e.data.search;
   let tokens = e.data.tokens;
   let tokensBasicForm = tokens.map(e=>{
     if (e.basic_form==undefined) {
@@ -13,14 +31,15 @@ self.onmessage = (e)=>{
     return e.basic_form;
   });
   let tokensReadingForm = tokens.map(e=>e.reading);
-  if (reply_dictionary==undefined||tokensBasicForm==undefined) {
+  if (replyDictionary==undefined||replyDictionary.length<=0||searchDict==undefined||searchDict.length<=0||tokensBasicForm==undefined) {
     self.postMessage([]);
-    return false;
   }
-  //let replyObj = reply_dictionary.filter(e=>isMatchList(e.utterance, tokensBasicForm))[0];
-  let replyObj = reply_dictionary.filter(e=>isMatchList(e.utterance.map(f=>Object.values(f)), tokensBasicForm))[0];
+  let replyObj = searchReply(replyDictionary, tokensBasicForm, searchDict);
   if (replyObj==undefined) {
-    let replyObj_reading = reply_dictionary.filter(e=>isMatchList(e.utterance.map(f=>Object.values(f)), tokensReadingForm))[0];
+    let replyObj_reading = searchReply(replyDictionary, tokensReadingForm, searchDict);
+    if (replyObj_reading==undefined) {
+      replyObj_reading = e.data.text;
+    }
     self.postMessage(replyObj_reading);
     const endTime = performance.now();
     console.log(endTime - startTime);
@@ -29,4 +48,4 @@ self.onmessage = (e)=>{
     const endTime = performance.now();
     console.log(endTime - startTime);
   }
-};
+}

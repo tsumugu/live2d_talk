@@ -464,40 +464,21 @@ export class LAppModel extends CubismUserModel {
 
     //--------------------------------------------------------------------------
     this._model.loadParameters(); // 前回セーブされた状態をロード
+    // もしモーションの再生が終了していたら
     if (this._motionManager.isFinished()) {
-      // モーションを再生
-      let motionNumber = MotionNo.getInstance().getMotionNo();
-      let TimestampAtMotionSeted = MotionNo.getInstance().getMotionSetedTimestamp();
-      let nowTimesamp = Date.now();
-      let timediff = nowTimesamp-TimestampAtMotionSeted;
-      //if (this._beforeMotionNo!=motionNumber) {
-      // 1秒以内に変更されていた場合のみ実行
-      if (timediff<=1000) {
+      // モーションを新たに再生
+      let motionNumber = MotionNo.getInstance().getMotionNo(); // mootionno.tsからモーション番号を受け取る
+      if (motionNumber!=undefined) {
         console.log("Start Motion / No: ", motionNumber);
         this.startMotion(LAppDefine.MotionGroupIdle, motionNumber, LAppDefine.PriorityIdle);
-        this._beforeMotionNo = motionNumber;
       }
-      /*
-      // モーションの再生がない場合、待機モーションの中からランダムで再生する
-      this.startRandomMotion(
-        LAppDefine.MotionGroupIdle,
-        LAppDefine.PriorityIdle
-      );
-      */
     } else {
+      // 再生中だったらupdate
       motionUpdated = this._motionManager.updateMotion(
         this._model,
         deltaTimeSeconds
-      ); // モーションを更新
+      );
     }
-    /*
-    if (!this._motionManager.isFinished()) {
-      motionUpdated = this._motionManager.updateMotion(
-        this._model,
-        deltaTimeSeconds
-      ); // モーションを更新
-    }
-    */
     this._model.saveParameters(); // 状態を保存
     //--------------------------------------------------------------------------
 
@@ -513,22 +494,6 @@ export class LAppModel extends CubismUserModel {
       this._expressionManager.updateMotion(this._model, deltaTimeSeconds); // 表情でパラメータ更新（相対変化）
     }
 
-    /*
-    // ドラッグによる変化
-    // ドラッグによる顔の向きの調整
-    this._model.addParameterValueById(this._idParamAngleX, this._dragX * 30); // -30から30の値を加える
-    this._model.addParameterValueById(this._idParamAngleY, this._dragY * 30);
-    this._model.addParameterValueById(
-      this._idParamAngleZ,
-      this._dragX * this._dragY * -30
-    );
-
-    // ドラッグによる体の向きの調整
-    this._model.addParameterValueById(
-      this._idParamBodyAngleX,
-      this._dragX * 10
-    ); // -10から10の値を加える
-    */
     // カメラで認識した顔の位置に合わせて眼球を動かす
     this._model.addParameterValueById(this._idParamEyeBallX, EyeTracking.getInstance().getEyeX());
     this._model.addParameterValueById(this._idParamEyeBallY, EyeTracking.getInstance().getEyeY());
@@ -549,8 +514,7 @@ export class LAppModel extends CubismUserModel {
 
       this._wavFileHandler.update(deltaTimeSeconds);
       value = this._wavFileHandler.getRms();
-      // 音声合成APIから帰ってくるファイルの音量が小さいみたいなので大きくする
-      value = value*6;
+      value = value*6; // 音声合成APIから帰ってくるファイルの音量が小さいみたいなので大きくする
 
       for (let i = 0; i < this._lipSyncIds.getSize(); ++i) {
         this._model.addParameterValueById(this._lipSyncIds.at(i), value, 0.8);
@@ -625,16 +589,6 @@ export class LAppModel extends CubismUserModel {
     } else {
       motion.setFinishedMotionHandler(onFinishedMotionHandler);
     }
-
-    //voice
-    /*
-    const voice = this._modelSetting.getMotionSoundFileName(group, no);
-    if (voice.localeCompare('') != 0) {
-      let path = voice;
-      path = this._modelHomeDir + path;
-      this._wavFileHandler.start(path);
-    }
-    */
 
     if (this._debugMode) {
       LAppPal.printMessage(`[APP]start motion: [${group}_${no}`);

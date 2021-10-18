@@ -52,6 +52,27 @@ export class ReplyDict {
       return [];
     }
     return this.docs;
+    /*
+    // firebaseからはこんな感じのデータが帰ってきている
+    var reply_dictionary = [
+      {
+        "utterance": [["名前", "教える"], ["名前", "何"]],
+        "reply": "私の名前は花子です",
+        "emotion_name": "fun"
+      },
+      {
+        "utterance": [["犬", "好き"]],
+        "reply": "犬よりも猫のほうが好きです",
+        "emotion_name": "sad"
+      },
+      {
+        "utterance": [["ねむい"],["眠い"]],
+        "reply": "そうですか。",
+        "emotion_name": ""
+      }
+    ];
+    return reply_dictionary;
+    */
   }
   public getSearchObj(): Object {
     if (this.searchObj==undefined) {
@@ -91,26 +112,5 @@ export class ReplyDict {
     })
     MyUI.getInstance().finishReplyDict();
     return this.docs;
-
-    /*
-    var reply_dictionary = [
-      {
-        "utterance": [["名前", "教える"], ["名前", "何"]],
-        "reply": "私の名前は花子です",
-        "emotion_name": "fun"
-      },
-      {
-        "utterance": [["犬", "好き"]],
-        "reply": "犬よりも猫のほうが好きです",
-        "emotion_name": "sad"
-      },
-      {
-        "utterance": [["ねむい"],["眠い"]],
-        "reply": "そうですか。",
-        "emotion_name": ""
-      }
-    ];
-    return reply_dictionary;
-    */
   }
 }

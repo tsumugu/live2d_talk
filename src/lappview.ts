@@ -147,93 +147,11 @@ export class LAppView {
       initBackGroundTexture
     );
 
-    // 歯車画像初期化
-    /*
-    imageName = LAppDefine.GearImageName;
-    const initGearTexture = (textureInfo: TextureInfo): void => {
-      const x = width - textureInfo.width * 0.5;
-      const y = height - textureInfo.height * 0.5;
-      const fwidth = textureInfo.width;
-      const fheight = textureInfo.height;
-      this._gear = new LAppSprite(x, y, fwidth, fheight, textureInfo.id);
-    };
-
-    textureManager.createTextureFromPngFile(
-      resourcesPath + imageName,
-      false,
-      initGearTexture
-    );
-    */
-
     // シェーダーを作成
     if (this._programId == null) {
       this._programId = LAppDelegate.getInstance().createShader();
     }
   }
-
-  /**
-   * タッチされた時に呼ばれる。
-   *
-   * @param pointX スクリーンX座標
-   * @param pointY スクリーンY座標
-   */
-  /*
-  public onTouchesBegan(pointX: number, pointY: number): void {
-    this._touchManager.touchesBegan(pointX, pointY);
-  }
-  */
-
-  /**
-   * タッチしているときにポインタが動いたら呼ばれる。
-   *
-   * @param pointX スクリーンX座標
-   * @param pointY スクリーンY座標
-   */
-  /*
-  public onTouchesMoved(pointX: number, pointY: number): void {
-    const viewX: number = this.transformViewX(this._touchManager.getX());
-    const viewY: number = this.transformViewY(this._touchManager.getY());
-
-    this._touchManager.touchesMoved(pointX, pointY);
-
-    const live2DManager: LAppLive2DManager = LAppLive2DManager.getInstance();
-    live2DManager.onDrag(viewX, viewY);
-  }
-  */
-
-  /**
-   * タッチが終了したら呼ばれる。
-   *
-   * @param pointX スクリーンX座標
-   * @param pointY スクリーンY座標
-   */
-  /*
-  public onTouchesEnded(pointX: number, pointY: number): void {
-    // タッチ終了
-    const live2DManager: LAppLive2DManager = LAppLive2DManager.getInstance();
-    live2DManager.onDrag(0.0, 0.0);
-
-    {
-      // シングルタップ
-      const x: number = this._deviceToScreen.transformX(
-        this._touchManager.getX()
-      ); // 論理座標変換した座標を取得。
-      const y: number = this._deviceToScreen.transformY(
-        this._touchManager.getY()
-      ); // 論理座標変化した座標を取得。
-
-      if (LAppDefine.DebugTouchLogEnable) {
-        LAppPal.printMessage(`[APP]touchesEnded x: ${x} y: ${y}`);
-      }
-      live2DManager.onTap(x, y);
-
-      // 歯車にタップしたか
-      if (this._gear.isHit(pointX, pointY)) {
-        live2DManager.nextScene();
-      }
-    }
-  }
-  */
 
   /**
    * X座標をView座標に変換する。
