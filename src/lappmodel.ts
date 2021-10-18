@@ -247,7 +247,31 @@ export class LAppModel extends CubismUserModel {
     // Breath
     const setupBreath = (): void => {
       this._breath = CubismBreath.create();
-
+       const breathParameters: csmVector<BreathParameterData> = new csmVector();
+      breathParameters.pushBack(
+        new BreathParameterData(this._idParamAngleX, 0.0, 10.0, 6.5345, 0.5)
+      );
+      breathParameters.pushBack(
+        new BreathParameterData(this._idParamAngleY, 0.0, 8.0, 3.5345, 0.5)
+      );
+      breathParameters.pushBack(
+        new BreathParameterData(this._idParamAngleZ, 0.0, 10.0, 5.5345, 0.5)
+      );
+      breathParameters.pushBack(
+        new BreathParameterData(this._idParamBodyAngleX, 0.0, 4.0, 15.5345, 0.5)
+      );
+      breathParameters.pushBack(
+        new BreathParameterData(
+          CubismFramework.getIdManager().getId(
+            CubismDefaultParameterId.ParamBreath
+          ),
+          0.0,
+          0.5,
+          3.2345,
+          0.5
+        )
+      );
+      /*
       const breathParameters: csmVector<BreathParameterData> = new csmVector();
       breathParameters.pushBack(
         new BreathParameterData(this._idParamAngleX, 0.0, 15.0, 6.5345, 0.5)
@@ -272,6 +296,7 @@ export class LAppModel extends CubismUserModel {
           0.5
         )
       );
+      */
 
       this._breath.setParameters(breathParameters);
       this._state = LoadStep.LoadUserData;

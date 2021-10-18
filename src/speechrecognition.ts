@@ -77,7 +77,14 @@ export class SpeechRecognitionClass {
   private replyfromapi(text): void {
     console.log(text);
     // 返答候補がなかったときに「理解できません」とか言うのは味気ないので、Chaplus API(雑談API)に投げてなにかしら返答する。
-    const obj = {utterance: text};
+    const obj = {
+      agentState: {
+        "agentName": "凛",
+        "age":"0",
+        "tone":"normal"
+      },
+      utterance: text
+    };
     const method = "POST";
     const body = JSON.stringify(obj);
     const headers = {
@@ -86,7 +93,7 @@ export class SpeechRecognitionClass {
     };
     fetch("https://tsumugu2626.xyz/chaplus.php?apikey=615ef2feaa3b3", {method, headers, body}).then(res=>{
       res.text().then((resStr)=>{
-        this.speak(resStr, "happy");
+        this.speak(resStr, "fun");
       });
     }).catch(error=>console.error(error));
   }
@@ -96,7 +103,7 @@ export class SpeechRecognitionClass {
     captionElm.innerHTML = "listening...";
   }
   private showLoadingCaption(): void {
-    MotionNo.getInstance().setMotion("thinking");
+    //MotionNo.getInstance().setMotion("thinking");
     const captionElm = document.getElementById("caption");
     captionElm.innerHTML = "loading...";
   }

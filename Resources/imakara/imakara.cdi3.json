@@ -1,0 +1,286 @@
+{
+	"Version": 3,
+	"Parameters": [
+		{
+			"Id": "ParamAngleX",
+			"GroupId": "",
+			"Name": "角度 X"
+		},
+		{
+			"Id": "ParamAngleY",
+			"GroupId": "",
+			"Name": "角度 Y"
+		},
+		{
+			"Id": "ParamAngleZ",
+			"GroupId": "",
+			"Name": "角度 Z"
+		},
+		{
+			"Id": "ParamEyeLOpen",
+			"GroupId": "",
+			"Name": "左目　開閉"
+		},
+		{
+			"Id": "ParamEyeLSmile",
+			"GroupId": "",
+			"Name": "左目　笑顔"
+		},
+		{
+			"Id": "ParamEyeROpen",
+			"GroupId": "",
+			"Name": "右目　開閉"
+		},
+		{
+			"Id": "ParamEyeRSmile",
+			"GroupId": "",
+			"Name": "右目　笑顔"
+		},
+		{
+			"Id": "ParamEyeBallX",
+			"GroupId": "",
+			"Name": "目玉 X"
+		},
+		{
+			"Id": "ParamEyeBallY",
+			"GroupId": "",
+			"Name": "目玉 Y"
+		},
+		{
+			"Id": "ParamBrowLY",
+			"GroupId": "",
+			"Name": "左眉　上下"
+		},
+		{
+			"Id": "ParamBrowRY",
+			"GroupId": "",
+			"Name": "右眉　上下"
+		},
+		{
+			"Id": "ParamBrowLX",
+			"GroupId": "",
+			"Name": "左眉　左右"
+		},
+		{
+			"Id": "ParamBrowRX",
+			"GroupId": "",
+			"Name": "右眉　左右"
+		},
+		{
+			"Id": "ParamBrowLAngle",
+			"GroupId": "",
+			"Name": "左眉　角度"
+		},
+		{
+			"Id": "ParamBrowRAngle",
+			"GroupId": "",
+			"Name": "右眉　角度"
+		},
+		{
+			"Id": "ParamBrowLForm",
+			"GroupId": "",
+			"Name": "左眉　変形"
+		},
+		{
+			"Id": "ParamBrowRForm",
+			"GroupId": "",
+			"Name": "右眉　変形"
+		},
+		{
+			"Id": "ParamMouthForm",
+			"GroupId": "",
+			"Name": "口　変形"
+		},
+		{
+			"Id": "ParamMouthOpenY",
+			"GroupId": "",
+			"Name": "口　開閉"
+		},
+		{
+			"Id": "ParamCheek",
+			"GroupId": "",
+			"Name": "照れ"
+		},
+		{
+			"Id": "ParamBodyAngleX",
+			"GroupId": "",
+			"Name": "体の回転　X"
+		},
+		{
+			"Id": "ParamBodyAngleY",
+			"GroupId": "",
+			"Name": "体の回転　Y"
+		},
+		{
+			"Id": "ParamBodyAngleZ",
+			"GroupId": "",
+			"Name": "体の回転　Z"
+		},
+		{
+			"Id": "ParamBreath",
+			"GroupId": "",
+			"Name": "呼吸"
+		},
+		{
+			"Id": "ParamHairFront",
+			"GroupId": "",
+			"Name": "髪揺れ　前"
+		},
+		{
+			"Id": "ParamHairSide",
+			"GroupId": "",
+			"Name": "髪揺れ　横"
+		},
+		{
+			"Id": "ParamHairBack",
+			"GroupId": "",
+			"Name": "髪揺れ　後"
+		},
+		{
+			"Id": "Param",
+			"GroupId": "",
+			"Name": "リボン揺れ"
+		}
+	],
+	"ParameterGroups": [],
+	"Parts": [
+		{
+			"Id": "Part",
+			"Name": "髪飾り"
+		},
+		{
+			"Id": "Part2",
+			"Name": "髪の毛"
+		},
+		{
+			"Id": "Part5",
+			"Name": "顔パーツ"
+		},
+		{
+			"Id": "Part22",
+			"Name": "顔　髪の毛の影"
+		},
+		{
+			"Id": "Part23",
+			"Name": "顔面"
+		},
+		{
+			"Id": "Part16",
+			"Name": "制服"
+		},
+		{
+			"Id": "Part24",
+			"Name": "首"
+		},
+		{
+			"Id": "Part25",
+			"Name": "制服首元　青"
+		},
+		{
+			"Id": "Part26",
+			"Name": "耳"
+		},
+		{
+			"Id": "Part27",
+			"Name": "体"
+		},
+		{
+			"Id": "Part31",
+			"Name": "後ろ髪"
+		},
+		{
+			"Id": "Part3",
+			"Name": "前髪"
+		},
+		{
+			"Id": "Part4",
+			"Name": "横髪"
+		},
+		{
+			"Id": "Part6",
+			"Name": "鼻"
+		},
+		{
+			"Id": "Part7",
+			"Name": "左眉毛"
+		},
+		{
+			"Id": "Part8",
+			"Name": "右眉毛"
+		},
+		{
+			"Id": "Part9",
+			"Name": "頬"
+		},
+		{
+			"Id": "Part10",
+			"Name": "右目"
+		},
+		{
+			"Id": "Part11",
+			"Name": "左目"
+		},
+		{
+			"Id": "Part12",
+			"Name": "口"
+		},
+		{
+			"Id": "Part17",
+			"Name": "制服の青"
+		},
+		{
+			"Id": "Part18",
+			"Name": "リボン　赤　上"
+		},
+		{
+			"Id": "Part19",
+			"Name": "セーラー服　中間"
+		},
+		{
+			"Id": "Part20",
+			"Name": "リボン　赤　下1"
+		},
+		{
+			"Id": "Part21",
+			"Name": "リボン　赤　下２"
+		},
+		{
+			"Id": "Part28",
+			"Name": "胴体"
+		},
+		{
+			"Id": "Part29",
+			"Name": "肩"
+		},
+		{
+			"Id": "Part30",
+			"Name": "腕"
+		},
+		{
+			"Id": "Part13",
+			"Name": "上　口🟢"
+		},
+		{
+			"Id": "Part14",
+			"Name": "下　口🟢"
+		},
+		{
+			"Id": "Part15",
+			"Name": "口内🟢"
+		}
+	],
+	"CombinedParameters": [
+		[
+			"ParamAngleX",
+			"ParamAngleY"
+		],
+		[
+			"ParamEyeBallX",
+			"ParamEyeBallY"
+		],
+		[
+			"ParamMouthForm",
+			"ParamMouthOpenY"
+		]
+	]
+}
